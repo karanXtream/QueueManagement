@@ -70,7 +70,7 @@ export default function SettingsCard() {
         <div className="pt-4 border-t flex items-center justify-between">
           <button
             onClick={resetQueue}
-            className="bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200 transition"
+            className="bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200 transition cursor-pointer"
           >
             Reset Queue
           </button>

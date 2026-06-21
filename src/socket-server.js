@@ -1,24 +1,35 @@
-import { createServer } from "http";
-import { Server } from "socket.io";
+const next = require("next");
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 
-const httpServer = createServer();
+const dev = process.env.NODE_ENV !== "production";
 
-const io = new Server(httpServer, {
-  cors: {
-    origin: "*",
-  },
-});
+const app = next({ dev });
 
-global.io = io;
+const handler = app.getRequestHandler();
 
-io.on("connection", (socket) => {
-  console.log("Connected:", socket.id);
-
-  socket.on("disconnect", () => {
-    console.log("Disconnected:", socket.id);
+app.prepare().then(() => {
+  const httpServer = createServer((req, res) => {
+    handler(req, res);
   });
-});
 
-httpServer.listen(4000, () => {
-  console.log("Socket Server Running on 4000");
+  const io = new Server(httpServer, {
+    cors: {
+      origin: "*",
+    },
+  });
+
+  global.io = io;
+
+  io.on("connection", (socket) => {
+    console.log("Client Connected:", socket.id);
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected");
+    });
+  });
+
+  httpServer.listen(3000, () => {
+    console.log("Server running on 3000");
+  });
 });

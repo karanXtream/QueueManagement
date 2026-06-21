@@ -38,6 +38,47 @@ export default function PatientQueueScreen() {
     }
   }, [params?.id]);
 
+  useEffect(() => {
+  const socket = io();
+
+  socket.on("connect", () => {
+    console.log("Connected", socket.id);
+  });
+
+  socket.on("queue-update", (data) => {
+
+
+    setPatient((prev) => {
+      if (!prev) return prev;
+
+      const tokensAhead = Math.max(
+        0,
+        prev.token -
+        data.currentServing -
+        1
+      );
+
+
+      return {
+        ...prev,
+        currentServing:
+          data.currentServing,
+
+        tokensAhead,
+
+        estimatedWait:
+          tokensAhead *
+          data.avgConsultationTime,
+      };
+    });
+
+  });
+
+  return () => {
+    socket.disconnect();
+  };
+}, []);
+
 
 
   if (loading) {

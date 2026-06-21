@@ -44,7 +44,7 @@ export default function CurrentTokenCard() {
             <button
                 onClick={handleButtonClick}
                 disabled={!state.queue.length}
-                className="mt-4 w-full bg-green-600 text-white p-3 rounded-lg disabled:bg-gray-400"
+                className="mt-4 w-full bg-green-600 text-white p-3 rounded-lg disabled:bg-gray-400 cursor-pointer"
             >
                 Call Next Token
             </button>

@@ -52,9 +52,9 @@ export default function AddPatientCard() {
 
       <button
         onClick={handleAdd}
-        className="mt-3 w-full bg-blue-600 text-white p-3 rounded-lg"
+        className="mt-3 w-full bg-blue-600 text-white p-3 rounded-lg cursor-pointer"
       >
-        Assign Token #{state.nextToken}
+        Assign Token 
       </button>
     </div>
   );

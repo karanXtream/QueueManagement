@@ -12,6 +12,8 @@ export default function QueueList() {
 
     const [search, setSearch] = useState("");
 
+    
+
     const filteredQueue = state.queue.filter((patient) =>
         patient.name.toLowerCase().includes(search.toLowerCase())
     );

@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "socket": "node src/socket-server.js",
+    "dev": "node src/socket-server.js",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

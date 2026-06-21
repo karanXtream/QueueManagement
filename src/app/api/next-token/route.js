@@ -21,6 +21,16 @@ export async function POST() {
 
     await queueState.save();
 
+    global.io?.emit("queue-update", {
+      currentServing:
+        queueState.currentServing,
+
+      avgConsultationTime:
+        queueState.avgConsultationTime,
+    });
+
+
+
     return Response.json({
       success: true,
       currentServing: queueState.currentServing,
