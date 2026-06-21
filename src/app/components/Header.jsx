@@ -28,7 +28,7 @@ export default function Header() {
       <div className="flex items-center gap-3">
         <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
         <h1 className="font-extrabold text-blue-600 text-lg">
-          ClinicQ
+          आयुष्मान Clinic
         </h1>
         <span className="text-slate-500 text-sm">
           Receptionist

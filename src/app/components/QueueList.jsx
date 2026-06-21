@@ -12,8 +12,29 @@ export default function QueueList() {
 
     const [search, setSearch] = useState("");
 
-    
+    async function handleDelete(id) {
+        try {
+            const res = await fetch(`/api/delete/${id}`, {
+                method: "DELETE",
+            });
 
+            const data = await res.json();
+
+            console.log("delete response", data);
+
+            if (data.success) {
+                const index = state.queue.findIndex(
+                    (p) => p._id === id
+                );
+
+                console.log("index", index);
+
+                removePatient(index);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
     const filteredQueue = state.queue.filter((patient) =>
         patient.name.toLowerCase().includes(search.toLowerCase())
     );
@@ -92,11 +113,7 @@ export default function QueueList() {
                                 {/* Remove Button */}
                                 <button
                                     onClick={() =>
-                                        removePatient(
-                                            state.queue.findIndex(
-                                                (p) => p.token === patient.token
-                                            )
-                                        )
+                                        handleDelete(patient._id)
                                     }
                                     className="bg-red-100 text-red-600 px-3 py-2 rounded-lg hover:bg-red-200"
                                 >

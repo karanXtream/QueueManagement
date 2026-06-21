@@ -64,12 +64,19 @@ const addPatient = (patient) => {
     }));
   };
 
-  const removePatient = (index) => {
-    setState((prev) => ({
+const removePatient = (index) => {
+  setState((prev) => {
+    console.log("before", prev.queue);
+
+    const updated = prev.queue.filter(
+      (_, i) => i !== index
+    );
+    return {
       ...prev,
-      queue: prev.queue.filter((_, i) => i !== index),
-    }));
-  };
+      queue: updated,
+    };
+  });
+};
 
   const resetQueue = () => {
     setState({
