@@ -21,13 +21,13 @@ export default function PatientQueueScreen() {
         }
 
         const data = await res.json();
-        console.log("data", data)
+       
 
         if (data.success) {
           setPatient(data);
         }
       } catch (error) {
-        console.error(error);
+        
       } finally {
         setLoading(false);
       }
@@ -39,45 +39,45 @@ export default function PatientQueueScreen() {
   }, [params?.id]);
 
   useEffect(() => {
-  const socket = io();
+    const socket = io();
 
-  socket.on("connect", () => {
-    console.log("Connected", socket.id);
-  });
-
-  socket.on("queue-update", (data) => {
-
-
-    setPatient((prev) => {
-      if (!prev) return prev;
-
-      const tokensAhead = Math.max(
-        0,
-        prev.token -
-        data.currentServing -
-        1
-      );
-
-
-      return {
-        ...prev,
-        currentServing:
-          data.currentServing,
-
-        tokensAhead,
-
-        estimatedWait:
-          tokensAhead *
-          data.avgConsultationTime,
-      };
+    socket.on("connect", () => {
+      console.log("Connected", socket.id);
     });
 
-  });
+    socket.on("queue-update", (data) => {
 
-  return () => {
-    socket.disconnect();
-  };
-}, []);
+
+      setPatient((prev) => {
+        if (!prev) return prev;
+
+        const tokensAhead = Math.max(
+          0,
+          prev.token -
+          data.currentServing -
+          1
+        );
+
+
+        return {
+          ...prev,
+          currentServing:
+            data.currentServing,
+
+          tokensAhead,
+
+          estimatedWait:
+            tokensAhead *
+            data.avgConsultationTime,
+        };
+      });
+
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
 
 
@@ -111,7 +111,7 @@ export default function PatientQueueScreen() {
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-blue-600">
-              ClinicQ
+              आयुष्मान Clinic
             </h1>
 
             <p className="text-slate-500">
@@ -139,19 +139,33 @@ export default function PatientQueueScreen() {
             Here's your queue status
           </p>
 
-          <div className="mt-8 inline-block border-2 border-blue-200 rounded-3xl px-16 py-8">
-            <p className="text-blue-600 font-semibold text-xl">
-              YOUR TOKEN
-            </p>
+          {
 
-            <h1 className="text-[120px] leading-none font-extrabold text-blue-600">
-              #{patient.token}
-            </h1>
-          </div>
+            patient.token == patient.currentServing ? <div className="mt-8 inline-block border-2 border-blue-200 rounded-3xl px-16 py-8 bg-red-600">
+              <p className="text-white font-semibold text-xl">
+                Your Turn
+              </p>
+
+              <h1 className="text-[120px] leading-none font-extrabold text-white">
+                #{patient.token}
+              </h1>
+            </div> : <div className="mt-8 inline-block border-2 border-blue-200 rounded-3xl px-16 py-8">
+              <p className="text-blue-600 font-semibold text-xl"> 
+                YOUR TOKEN
+              </p>
+
+              <h1 className="text-[120px] leading-none font-extrabold text-blue-600">
+                #{patient.token}
+              </h1>
+            </div>
+
+          }
+
+
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 mt-8">
-          <div className="bg-white rounded-3xl border shadow-sm p-8">
+        <div className="grid md:grid-cols-3 gap-6 mt-8 justify-center">
+          <div className="bg-white rounded-3xl border shadow-sm p-8 items-center flex flex-col">
             <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
               <User className="text-blue-600" />
             </div>
@@ -165,7 +179,7 @@ export default function PatientQueueScreen() {
             </h3>
           </div>
 
-          <div className="bg-white rounded-3xl border shadow-sm p-8">
+          <div className="bg-white rounded-3xl border shadow-sm p-8 items-center flex flex-col">
             <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center">
               <User className="text-purple-600" />
             </div>
@@ -183,7 +197,7 @@ export default function PatientQueueScreen() {
             </p>
           </div>
 
-          <div className="bg-white rounded-3xl border shadow-sm p-8">
+          <div className="bg-white rounded-3xl border shadow-sm p-8 items-center flex flex-col">
             <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
               <Clock className="text-green-600" />
             </div>

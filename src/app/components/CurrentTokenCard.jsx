@@ -18,7 +18,7 @@ export default function CurrentTokenCard() {
     callNext(); // update UI only after DB succeeds
 
   } catch (error) {
-    console.error(error);
+    
   }
 };
 

@@ -20,19 +20,19 @@ export default function QueueList() {
 
             const data = await res.json();
 
-            console.log("delete response", data);
+           
 
             if (data.success) {
                 const index = state.queue.findIndex(
                     (p) => p._id === id
                 );
 
-                console.log("index", index);
+                
 
                 removePatient(index);
             }
         } catch (error) {
-            console.error(error);
+          
         }
     }
     const filteredQueue = state.queue.filter((patient) =>
