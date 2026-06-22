@@ -1,36 +1,385 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🏥 Wooble – Smart Queue Management System
 
-## Getting Started
+![Wooble Banner](https://img.shields.io/badge/Status-Active-success)
+![Next.js](https://img.shields.io/badge/Next.js-15-black)
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-green)
+![Socket.IO](https://img.shields.io/badge/Socket.IO-Realtime-blue)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-UI-38BDF8)
 
-First, run the development server:
+## 📌 Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Wooble is a real-time queue management platform designed to modernize patient flow in clinics and healthcare centers.
+
+Traditional clinics often rely on manual token systems, leading to confusion, overcrowding, long waiting times, and poor transparency. Wooble solves this by providing a digital queue experience where receptionists can manage patients while patients can track their queue status live through a QR code.
+
+The system ensures real-time synchronization between staff and patients, reducing uncertainty and improving the overall clinic experience.
+
+---
+
+## 🚀 Features
+
+### Receptionist Dashboard
+
+* Add patients instantly
+* Auto-generate queue tokens
+* Delete patients from queue
+* Search patients
+* Call next token
+* Configure average consultation time
+* Real-time queue updates
+* QR code generation for every patient
+
+### Patient Dashboard
+
+* Personalized queue page
+* View token number
+* View currently serving token
+* View number of patients ahead
+* Estimated waiting time
+* Live updates without refreshing
+* Mobile-friendly interface
+
+### Real-Time System
+
+* Socket.IO powered updates
+* Instant queue synchronization
+* No manual refresh required
+* Live waiting time calculations
+
+---
+
+## 🧠 Problem Statement
+
+Many clinics still manage patient queues manually.
+
+Common issues include:
+
+* Long waiting times
+* Lack of transparency
+* Patients repeatedly asking staff about queue status
+* Crowded waiting areas
+* No real-time updates
+* Poor patient experience
+
+Wooble addresses these issues by digitizing the entire queue workflow.
+
+---
+
+## 💡 Solution
+
+Wooble provides:
+
+1. Digital token generation
+2. Real-time queue tracking
+3. QR-based patient access
+4. Live synchronization between receptionist and patients
+5. Waiting time estimation
+6. Queue visibility from any device
+
+---
+
+## 🏗️ Architecture
+
+```text
+Receptionist Dashboard
+          │
+          ▼
+      Next.js
+          │
+          ▼
+      MongoDB
+          │
+          ▼
+     Socket.IO
+          │
+          ▼
+Patient Dashboard
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Frontend
 
-## Learn More
+* Next.js 15
+* React
+* Tailwind CSS
+* Lucide React
 
-To learn more about Next.js, take a look at the following resources:
+### Backend
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* Next.js Route Handlers
+* Node.js
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Database
 
-## Deploy on Vercel
+* MongoDB Atlas
+* Mongoose
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Real-Time Communication
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* Socket.IO
+
+### Utilities
+
+* QR Code Generator
+* Dynamic Routing
+* REST APIs
+
+---
+
+## 📂 Project Structure
+
+```text
+src/
+│
+├── app/
+│   ├── api/
+│   │   ├── patient/
+│   │   ├── delete/
+│   │   └── next-token/
+│   │
+│   ├── patients/
+│   │   └── [id]/
+│   │
+│   └── page.js
+│
+├── context/
+│   └── ClinicContext.js
+│
+├── models/
+│   ├── Patient.js
+│   └── QueueState.js
+│
+├── lib/
+│   ├── mongodb.js
+│   └── socket.js
+│
+└── socket-server.js
+```
+
+---
+
+## 🔄 Queue Flow
+
+### Adding a Patient
+
+```text
+Receptionist
+      │
+      ▼
+Add Patient
+      │
+      ▼
+Generate Token
+      │
+      ▼
+Save to MongoDB
+      │
+      ▼
+Generate QR Code
+      │
+      ▼
+Patient Joins Queue
+```
+
+---
+
+### Calling Next Token
+
+```text
+Receptionist Clicks
+"Call Next"
+        │
+        ▼
+Update QueueState
+        │
+        ▼
+Socket Emit
+        │
+        ▼
+All Patient Screens
+Update Instantly
+```
+
+---
+
+## 📱 QR Code Workflow
+
+Each patient receives a unique URL:
+
+```text
+/patients/{patientId}
+```
+
+Example:
+
+```text
+http://localhost:3000/patients/6a3414487cdb3512f9fc956f
+```
+
+The QR code contains this URL.
+
+Patients simply scan and view their queue status.
+
+---
+
+## 📊 Data Models
+
+### Patient
+
+```javascript
+{
+  _id,
+  patientName,
+  token,
+  addedAt,
+  status
+}
+```
+
+### Queue State
+
+```javascript
+{
+  currentServing,
+  avgConsultationTime
+}
+```
+
+---
+
+## ⏳ Waiting Time Calculation
+
+```javascript
+estimatedWait =
+tokensAhead * avgConsultationTime
+```
+
+Example:
+
+```text
+3 patients ahead
+Average consultation = 5 minutes
+
+Estimated Wait = 15 minutes
+```
+
+---
+
+## 🔌 API Endpoints
+
+### Create Patient
+
+```http
+POST /api/patient
+```
+
+### Get Patient
+
+```http
+GET /api/patient/:id
+```
+
+### Delete Patient
+
+```http
+DELETE /api/delete/:id
+```
+
+### Call Next Token
+
+```http
+POST /api/next-token
+```
+
+---
+
+## 🎯 Key Design Decisions
+
+### QR Based Access
+
+Patients do not need:
+
+* Login
+* App Installation
+* Account Creation
+
+Just scan and track.
+
+### Real-Time Updates
+
+Socket.IO ensures:
+
+* Instant updates
+* Better UX
+* No page refresh
+
+### Dynamic Routes
+
+Every patient gets a unique route:
+
+```text
+/patients/[id]
+```
+
+---
+
+## 📈 Future Improvements
+
+* SMS Notifications
+* WhatsApp Integration
+* Doctor Dashboard
+* Multi-Clinic Support
+* Analytics Dashboard
+* Appointment Scheduling
+* Patient History
+* Push Notifications
+* AI-Based Wait Time Prediction
+
+---
+
+## 🎓 What I Learned
+
+Building Wooble strengthened my understanding of:
+
+* Full Stack Development
+* Next.js App Router
+* MongoDB Design
+* Real-Time Systems
+* Socket.IO
+* Dynamic Routing
+* State Management
+* API Design
+* Product Thinking
+* User-Centered Development
+
+---
+
+## 🌟 Impact
+
+Wooble transforms a frustrating waiting experience into a transparent and predictable process.
+
+Benefits include:
+
+* Reduced patient anxiety
+* Improved clinic efficiency
+* Better communication
+* Real-time visibility
+* Faster patient flow
+* Modern healthcare experience
+
+---
+
+## 👨‍💻 Author
+
+**Karan Shrivastava**
+
+B.Tech CSE Student
+Full Stack Developer
+Passionate about building impactful products using modern web technologies.
+
+---
+
+### “The best way to predict the future is to build it.”
